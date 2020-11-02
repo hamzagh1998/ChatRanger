@@ -1,13 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/css/bootstrap.min.css">
-    <title>ChatRanger - Room</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/css/style.css">
+  <title>ChatRanger - Room</title>
 </head>
 <body>
-    <h1>Hello, world! - Room</h1>
+  <!-- Image and text -->
+  <nav class="navbar">
+    <a class="navbar-brand text-light" href="/">
+    <img src="/images/logo.jpeg" width="30" height="30" class="d-inline-block align-top" alt="">
+    ChatRanger
+    </a>
+  </nav>
+  <div class="container">
+    <div class="row">
+      <div class="col-xm-12 col-sm-12 col-md-4">
+        <!-- users box -->
+        <hr>
+        <h5 class="text-secondary">Connected user:</h5>
+        <div id="users-box"></div>
+      </div>
+      <div class="col-xm-12 col-sm-12 col-md-8 h-100">
+        <!-- messages box -->
+        <div id="msg-input-box">
+          <div id="msg-box" class="h-80 mb-5"></div>
+          <form id="msg-form">
+            <input id="msg-input" class="form-control" type="text" placeholder="Enter your messages" autocomplete="off" required>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
 </body>
 <script src="/socket.io/socket.io.js"></script>
+<script src="/js/room.js"></script>
 </html>

@@ -1,13 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/css/bootstrap.min.css">
-    <title>ChatRanger - Home</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/css/style.css">
+  <title>ChatRanger - Home</title>
 </head>
 <body>
-    <h1>Hello, world! - Home</h1>
+  <!-- Image and text -->
+  <nav class="navbar">
+    <a class="navbar-brand text-light" href="/">
+    <img src="/images/logo.jpeg" width="30" height="30" class="d-inline-block align-top" alt="">
+    ChatRanger
+    </a>
+  </nav>
+  <div class="container">
+    <h1>Hello: <span id="username"></span></h1>
+    <!-- username form -->
+    <p class="mb-0 mt-3">Change username:</p>
+    <form id="username-form">
+      <div class="form-check form-check-inline">
+        <input type="text" class="form-control" id="username-input" placeholder="Username">
+      </div>
+      <button type="submit" class="btn btn-primary">Change</button>
+    </form>
+    <!-- room form -->
+    <p class="mb-0 mt-3">Create room:</p>
+    <form id="room-form">
+      <div class="form-check form-check-inline">
+        <input type="text" class="form-control" id="room-input" placeholder="Room name">
+      </div>
+      <button type="submit" class="btn btn-primary">Create</button>
+    </form>
+    <!-- users box -->
+    <hr>
+    <h4 class="text-secondary">Connected user:</h4>
+    <div id="users-box"></div>
+    <!-- rooms box -->
+    <hr>
+    <h4 class="text-secondary">Available rooms:</h4>
+    <div id="rooms-box"></div>
+  </div>
 </body>
 <script src="/socket.io/socket.io.js"></script>
+<script src="/js/index.js"></script>
 </html>

@@ -1,0 +1,49 @@
+:root {
+  --main-color: #9b59b6;
+}
+
+body {
+  background-color: #f2f2f2;
+}
+
+nav {
+  background-color: var(--main-color);
+}
+
+span {
+  cursor: pointer;
+}
+
+.user:hover {
+  color: rgb(235, 55, 252);
+  transition: 0.3s ease;
+}
+
+#users-box {
+  padding: 1rem;
+}
+
+#msg-input-box {
+  width: 80%;
+}
+
+#msg-box {
+  overflow: scroll;
+}
+
+#msg-form {
+  position: fixed;
+  bottom: 0;
+  width: 50%;
+}
+
+.msg {
+  padding: 5px;
+  margin: 5px;
+  color: #fff;
+  border-radius: 8px;
+}
+
+.msg-user {
+  background-color: var(--main-color);
+}
