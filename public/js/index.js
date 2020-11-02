@@ -48,7 +48,7 @@ function changeUsername(event) {
   event.preventDefault()
   const usernameInput = document.getElementById('username-input')
   if (usernameInput.value) {
-    username = usernameInput.value
+    username = usernameInput.value.trim()
     localStorage.setItem('username', username)
     span.innerText = usernameInput.value
     socket.emit('change-username', {username: usernameInput.value, socketId: socket.id})
