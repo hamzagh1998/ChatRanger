@@ -25,7 +25,9 @@ socket.on('leave-room', msg => msgBox.innerHTML += `<small class="text-secondary
 socket.on('connected-users', users => {
   usersBox.innerHTML = ''
   users.forEach(user => {
-    usersBox.innerHTML += `<span class="m-2 user">${user.username}</span> | `
+    if (user.socketId != socket.id) {
+      usersBox.innerHTML += `<span class="m-2 user">${user.username}</span> | `
+    }
   })
 })
 socket.on('get-msg', msg => msgBox.innerHTML += `<p class="msg msg-user">${msg}</p>`)
