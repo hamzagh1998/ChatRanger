@@ -7,7 +7,7 @@ const roomForm = document.getElementById('room-form')
 function setUsername() {
   let username = localStorage.getItem('username')
   if (!username) {
-    username = prompt('Enetr your name: ')
+    username = prompt('Enetr your name: ').trim()
     if (username) {
       localStorage.setItem('username', username)
     } else {
