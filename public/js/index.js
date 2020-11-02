@@ -50,8 +50,8 @@ function changeUsername(event) {
   if (usernameInput.value) {
     username = usernameInput.value.trim()
     localStorage.setItem('username', username)
-    span.innerText = usernameInput.value
-    socket.emit('change-username', {username: usernameInput.value, socketId: socket.id})
+    span.innerText = usernameInput.value.trim()
+    socket.emit('change-username', {username: usernameInput.value.trim(), socketId: socket.id})
     usernameInput.value = ''
   } else {
     alert("This field couldn't be empty!")
