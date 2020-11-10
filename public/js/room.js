@@ -4,8 +4,16 @@ const usersBox = document.getElementById('users-box')
 const msgForm = document.getElementById('msg-form')
 const msgBox = document.getElementById('msg-box')
 
+
 const socket = io('/room')
 socket.on('connect', () => joinRoom())
+
+function scrollToBottom(messages) {
+  const shouldScroll = messages.scrollTop + messages.clientHeight === messages.scrollHeight
+  if (!shouldScroll) {
+    messages.scrollTop = messages.scrollHeight;
+  }
+}
 
 function joinRoom() {
   let username = localStorage.getItem('username')
@@ -20,8 +28,14 @@ function joinRoom() {
   socket.emit('join-room', {username, socketId: socket.id, roomId: location.href.split('/').slice(-1)[0]})
 }
 
-socket.on('greeting', msg => msgBox.innerHTML += `<small class="text-secondary"> << ${msg} >> </small><br>`)
-socket.on('leave-room', msg => msgBox.innerHTML += `<small class="text-secondary"> << ${msg} >> </small><br>`)
+socket.on('greeting', msg => {
+  msgBox.innerHTML += `<small class="text-secondary"> << ${msg} >> </small><br>`
+  scrollToBottom(msgBox.parentElement)
+})
+socket.on('leave-room', msg => {
+  msgBox.innerHTML += `<small class="text-secondary"> << ${msg} >> </small><br>`
+  scrollToBottom(msgBox.parentElement)
+})
 socket.on('connected-users', users => {
   usersBox.innerHTML = ''
   users.forEach(user => {
@@ -30,16 +44,20 @@ socket.on('connected-users', users => {
     }
   })
 })
-socket.on('get-msg', msg => msgBox.innerHTML += `<p class="msg msg-user">${msg}</p>`)
+socket.on('get-msg', msg => {
+  msgBox.innerHTML += `<p class="msg msg-user">${msg}</p>`
+  scrollToBottom(msgBox.parentElement)
+})
 socket.on('illegal-room', () => location.href = '/')
 socket.on('room-closed', () => location.href = '/')
 
 function sendMsg(event) {
   event.preventDefault()
   const msgInput = event.target.firstElementChild
-  msgBox.innerHTML += `<p class="msg bg-secondary">You: ${msgInput.value}</p>`
+  msgBox.innerHTML += `<p class="msg msg-local">You: ${msgInput.value}</p>`
   socket.emit('send-msg', {username: localStorage.getItem('username'), msg: msgInput.value, roomId: location.href.split('/').slice(-1)[0]})
   msgInput.value = ''
+  scrollToBottom(msgBox.parentElement)
 }
 
 // Event Listener

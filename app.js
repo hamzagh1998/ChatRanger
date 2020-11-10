@@ -92,7 +92,7 @@ roomNsp.on('connect', socket => {
       // Sending the connected users of a specific room
       roomNsp.to(socket.roomId).emit('connected-users', users)
     }      
-    roomNsp.to(socket.roomId).emit('leave-room', `${socket.username} leave the room!`)
+    roomNsp.to(socket.roomId).emit('leave-room', `${socket.username} left the room!`)
   })
 })
 
