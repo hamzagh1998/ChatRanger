@@ -6,6 +6,7 @@ const msgBox = document.getElementById('msg-box')
 const roomName = document.getElementById('roomName')
 const hostName = document.getElementById('hostName')
 
+const slug = location.href.split('/').slice(-1)[0]
 
 const socket = io('/room')
 socket.on('connect', () => joinRoom())
@@ -70,7 +71,7 @@ function sendMsg(event) {
   event.preventDefault()
   const msgInput = event.target.firstElementChild
   msgBox.innerHTML += `<p class="msg msg-local">You: ${msgInput.value}</p>`
-  socket.emit('send-msg', {username: localStorage.getItem('username'), msg: msgInput.value, roomId: location.href.split('/').slice(-1)[0]})
+  socket.emit('send-msg', {username: localStorage.getItem('username'), msg: msgInput.value, roomId: slug})
   msgInput.value = ''
   scrollToBottom(msgBox.parentElement)
 }
