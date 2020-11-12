@@ -6,7 +6,8 @@ const msgBox = document.getElementById('msg-box')
 const roomName = document.getElementById('roomName')
 const hostName = document.getElementById('hostName')
 
-const slug = location.href.split('/').slice(-1)[0]
+const slug = location.href.split('/').slice(-1)[0].split('#')[0]
+console.log(slug)
 
 const socket = io('/room')
 socket.on('connect', () => joinRoom())
@@ -28,10 +29,10 @@ function joinRoom() {
       return location.reload()
     }
   }
-  socket.emit('join-room', {username, socketId: socket.id, roomId: location.href.split('/').slice(-1)[0]})
+  socket.emit('join-room', {username, socketId: socket.id, roomId: slug})
 }
 
-socket.on('join-failed', msg => alert(msg))
+// socket.on('join-failed', msg => alert(msg))
 socket.on('greeting', msg => {
   msgBox.innerHTML += `<p class="bg-success text-light text-center rounded p-2 m-2">${msg}</p>`
   scrollToBottom(msgBox.parentElement)
@@ -59,7 +60,7 @@ socket.on('get-msg', msg => {
   scrollToBottom(msgBox.parentElement)
 })
 socket.on('illegal-join', () => {
-  alert('join faild change your username and try again!')
+  alert("failed to join room, failed hints\n1-room doesn't exist\n2-host reload the page\n3-duplicate usernames")
   location.href = '/'
 })
 socket.on('room-closed', () => {
