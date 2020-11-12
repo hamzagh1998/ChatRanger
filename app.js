@@ -74,11 +74,12 @@ roomNsp.on('connect', socket => {
       if (room) {
         // Sending the connected users of a specific room
         roomNsp.to(payload.roomId).emit('connected-users', room)
+        roomNsp.to(socket.id).emit('greeting', `${socket.username} welcome to ${room.roomName}'s room!`)
       }
     } else {
       socket.join(socket.id).emit('illegal-join')
     } 
-    socket.to(payload.roomId).broadcast.emit('greeting', `${payload.username} join the room!`)
+    socket.to(payload.roomId).broadcast.emit('joining', `${payload.username} join the room!`)
     // On send message
     socket.on('send-msg', payload => {
       socket.to(payload.roomId).broadcast.emit('get-msg', `${payload.username}: ${payload.msg}`)

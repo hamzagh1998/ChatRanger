@@ -32,6 +32,10 @@ function joinRoom() {
 
 socket.on('join-failed', msg => alert(msg))
 socket.on('greeting', msg => {
+  msgBox.innerHTML += `<p class="bg-success text-light text-center rounded p-2 m-2">${msg}</p>`
+  scrollToBottom(msgBox.parentElement)
+})
+socket.on('joining', msg => {
   msgBox.innerHTML += `<small class="text-secondary"> << ${msg} >> </small><br>`
   scrollToBottom(msgBox.parentElement)
 })
