@@ -62,7 +62,6 @@ socket.on('illegal-join', () => {
   location.href = '/'
 })
 socket.on('room-closed', () => {
-  alert('join faild change your username and try again!')
   alert('Host closed the room!')
   location.href = '/'
 })
