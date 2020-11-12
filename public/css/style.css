@@ -42,7 +42,8 @@ span {
 }
 
 #msg-form {
-  position: relative;
+  position: absolute;
+  width: 100%;
   bottom: 0;
   right: 0;
 }
@@ -63,6 +64,8 @@ span {
 }
 
 .card {
+  position: relative;
+  bottom: 0;
   box-shadow: 2px 4px 8px #f2f2f2;
   border-radius: 5px;
 }
@@ -79,7 +82,7 @@ span {
     max-height: 60vh;
   } 
 
-  #msg-input-box {
+  #msg-box {
     margin: auto;
     min-height: 60vh;
   }
