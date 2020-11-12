@@ -3,6 +3,8 @@ const msgInput = document.getElementById('msg-input')
 const usersBox = document.getElementById('users-box')
 const msgForm = document.getElementById('msg-form')
 const msgBox = document.getElementById('msg-box')
+const roomName = document.getElementById('roomName')
+const hostName = document.getElementById('hostName')
 
 
 const socket = io('/room')
@@ -28,6 +30,7 @@ function joinRoom() {
   socket.emit('join-room', {username, socketId: socket.id, roomId: location.href.split('/').slice(-1)[0]})
 }
 
+socket.on('join-failed', msg => alert(msg))
 socket.on('greeting', msg => {
   msgBox.innerHTML += `<small class="text-secondary"> << ${msg} >> </small><br>`
   scrollToBottom(msgBox.parentElement)
@@ -36,9 +39,11 @@ socket.on('leave-room', msg => {
   msgBox.innerHTML += `<small class="text-secondary"> << ${msg} >> </small><br>`
   scrollToBottom(msgBox.parentElement)
 })
-socket.on('connected-users', users => {
+socket.on('connected-users', room => {
+  roomName.innerText = 'Room: '+room.roomName
+  hostName.innerText = 'Host: '+room.hostName
   usersBox.innerHTML = ''
-  users.forEach(user => {
+  room.users.forEach(user => {
     if (user.socketId != socket.id) {
       usersBox.innerHTML += `<span class="m-2 user">${user.username}</span> | `
     }
@@ -48,8 +53,15 @@ socket.on('get-msg', msg => {
   msgBox.innerHTML += `<p class="msg msg-user">${msg}</p>`
   scrollToBottom(msgBox.parentElement)
 })
-socket.on('illegal-room', () => location.href = '/')
-socket.on('room-closed', () => location.href = '/')
+socket.on('illegal-join', () => {
+  alert('join faild change your username and try again!')
+  location.href = '/'
+})
+socket.on('room-closed', () => {
+  alert('join faild change your username and try again!')
+  alert('Host closed the room!')
+  location.href = '/'
+})
 
 function sendMsg(event) {
   event.preventDefault()

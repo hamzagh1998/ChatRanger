@@ -6,7 +6,7 @@ const server = require('http').createServer(app)
 const io = require('socket.io')(server)
 
 let connectedUser = [] // { username, socketId }
-const rooms = [] // { roomId, hostId, roomName, users: [{ username, socketId  }] }
+const rooms = [] // { roomId, hostId, roomName, hostName, users: [{ username, socketId  }] }
 
 // ============================== middleware ==============================
 app.use(express.static(path.join(__dirname, 'public')))
@@ -35,17 +35,28 @@ function checkRoomIdx(roomId) {
 function checkRoom(payload) {
   const roomIdx = checkRoomIdx(payload.roomId)
   if (roomIdx > -1) {
-    if (rooms[roomIdx].hostId === null) rooms[roomIdx].hostId = payload.socketId
-    else rooms[roomIdx].users.push({socketId: payload.socketId, username: payload.username})
+    if (rooms[roomIdx].hostId === null) { // push the host id and host name to the room
+      rooms[roomIdx].hostId = payload.socketId
+      rooms[roomIdx].hostName = payload.username
+    } else {
+      if (
+          rooms[roomIdx].users.filter(user => user.username === payload.username).length > 0 ||
+          rooms[roomIdx].hostName === payload.username
+         ) {
+           return false
+         } else {
+           rooms[roomIdx].users.push({socketId: payload.socketId, username: payload.username}) // push user
+         }
+    }
     return true
   } return false
 }
 
 
 function getConnectedUsers(roomId) {
-  const users = rooms.filter(room => room.roomId === roomId)
-  if (users.length > 0) {
-    return users[0].users
+  const room = rooms.filter(room => room.roomId === roomId)
+  if (room.length > 0) {
+    return {roomName: room[0].roomName, hostName: room[0].hostName, users: room[0].users}
   } return false
 }
 
@@ -59,13 +70,13 @@ roomNsp.on('connect', socket => {
       socket.join(payload.roomId)
       socket.username = payload.username
       socket.roomId = payload.roomId
-      const users = getConnectedUsers(payload.roomId)
-      if (users) {
+      const room = getConnectedUsers(payload.roomId)
+      if (room) {
         // Sending the connected users of a specific room
-        roomNsp.to(payload.roomId).emit('connected-users', users)
+        roomNsp.to(payload.roomId).emit('connected-users', room)
       }
     } else {
-      socket.join(socket.id).emit('illegal-room')
+      socket.join(socket.id).emit('illegal-join')
     } 
     socket.to(payload.roomId).broadcast.emit('greeting', `${payload.username} join the room!`)
     // On send message
@@ -87,10 +98,10 @@ roomNsp.on('connect', socket => {
         })
       }      
     }
-    const users = getConnectedUsers(socket.roomId)
-    if (users) {
+    const room = getConnectedUsers(socket.roomId)
+    if (room) {
       // Sending the connected users of a specific room
-      roomNsp.to(socket.roomId).emit('connected-users', users)
+      roomNsp.to(socket.roomId).emit('connected-users', room)
     }      
     roomNsp.to(socket.roomId).emit('leave-room', `${socket.username} left the room!`)
   })
