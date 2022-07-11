@@ -7,7 +7,6 @@ const roomName = document.getElementById('roomName')
 const hostName = document.getElementById('hostName')
 
 const slug = location.href.split('/').slice(-1)[0].split('#')[0]
-console.log(slug)
 
 const socket = io('/room')
 socket.on('connect', () => joinRoom())
@@ -22,7 +21,7 @@ function scrollToBottom(messages) {
 function joinRoom() {
   let username = localStorage.getItem('username')
   if (!username) {
-    username = prompt('Enetr your name: ')
+    username = prompt('Enter your name: ')
     if (username) {
       localStorage.setItem('username', username)
     } else {
